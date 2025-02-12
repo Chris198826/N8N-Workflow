@@ -1,0 +1,2121 @@
+{
+  "name": "Vorlage Telegram bot und Trello Verknüpfung  vereinfacht",
+  "nodes": [
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {
+          "frequencyPenalty": 0.2,
+          "temperature": 1
+        }
+      },
+      "id": "9afba87b-800b-430f-88de-0094bdc8e771",
+      "name": "OpenAI Chat Model9",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        4240,
+        280
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "gPZPGEpPhjBdo14S",
+          "name": "OpenAi Key Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "prompt": "=Instructions:\n--------------\n{instructions}\n--------------\nCompletion:\n--------------\n{completion}\n--------------\n\nAbove, the Completion did not satisfy the constraints given in the Instructions.\nError:\n--------------\n{error}\n--------------\n\nPlease try again. Please only respond with an answer that satisfies the constraints laid out in the Instructions:"
+        }
+      },
+      "id": "8b68f115-fe02-4311-87ee-b4b93b3efea7",
+      "name": "Auto-fixing Output Parser2",
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        4520,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {
+          "responseFormat": "text"
+        }
+      },
+      "id": "1dd6e94e-332b-4474-8524-69344cfe3f28",
+      "name": "OpenAI Chat Model11",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        4500,
+        320
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "gPZPGEpPhjBdo14S",
+          "name": "OpenAi Key Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "numberOfItems": -1
+        }
+      },
+      "id": "b22b5ca4-4db3-48b2-a976-214bac45bbd6",
+      "name": "Item List Output Parser2",
+      "type": "@n8n/n8n-nodes-langchain.outputParserItemList",
+      "typeVersion": 1,
+      "position": [
+        4640,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "prompt": "=Instructions:\n--------------\n{instructions}\n--------------\nCompletion:\n--------------\n{completion}\n--------------\n\nAbove, the Completion did not satisfy the constraints given in the Instructions.\nError:\n--------------\n{error}\n--------------\n\nPlease try again. Please only respond with an answer that satisfies the constraints laid out in the Instructions:"
+        }
+      },
+      "id": "005427b1-c0d4-4c36-8db9-9de2d3fe40d3",
+      "name": "Auto-fixing Output Parser3",
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        1780,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "numberOfItems": -1
+        }
+      },
+      "id": "c74ce2f6-f33b-4356-be4d-e662032ef05d",
+      "name": "Item List Output Parser3",
+      "type": "@n8n/n8n-nodes-langchain.outputParserItemList",
+      "typeVersion": 1,
+      "position": [
+        1860,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "prompt": "=Instructions:\n--------------\n{instructions}\n--------------\nCompletion:\n--------------\n{completion}\n--------------\n\nAbove, the Completion did not satisfy the constraints given in the Instructions.\nError:\n--------------\n{error}\n--------------\n\nPlease try again. Please only respond with an answer that satisfies the constraints laid out in the Instructions:"
+        }
+      },
+      "id": "f334ea1c-acc7-4c8e-a79f-bbed69080b7b",
+      "name": "Auto-fixing Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        3580,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "numberOfItems": -1
+        }
+      },
+      "id": "d6e10a8e-d834-466b-b117-1880caec673a",
+      "name": "Item List Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserItemList",
+      "typeVersion": 1,
+      "position": [
+        3740,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "/"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "dd41bbf0-bee0-450b-9160-b769821a4abc",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.voice}}",
+                    "rightValue": ""
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "2800c442-dfe7-4ac5-88eb-21f79ac0eb5b",
+      "name": "Determine content type1",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        580,
+        440
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "*"
+        ],
+        "additionalFields": {
+          "download": true
+        }
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        360,
+        360
+      ],
+      "id": "109fa7c6-4226-410d-ab27-f056ac010e85",
+      "name": "Telegram Trigger (Main)",
+      "webhookId": "7afe4dcb-5e7a-42e7-80cf-f06b269743a0",
+      "notesInFlow": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "6Lj1leUc9xjPNSlr",
+          "name": "Telegram account Vorlage"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{$json.message.voice.file_id}}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        180
+      ],
+      "id": "b6907e95-4366-4053-bd0a-368de05c86e4",
+      "name": "Telegram Send (Bot A)",
+      "credentials": {
+        "telegramApi": {
+          "id": "6Lj1leUc9xjPNSlr",
+          "name": "Telegram account Vorlage"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "-1002487354215",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "id": "a4f3d711-a616-49f6-8f40-e48df169b59d",
+      "name": "Telegram Send #1 (Bot B)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2860,
+        -260
+      ],
+      "alwaysOutputData": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "6Lj1leUc9xjPNSlr",
+          "name": "Telegram account Vorlage"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "=-1002267652777",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "id": "eb6d6be5-96cf-4dd1-b1fc-a1e804261412",
+      "name": "Telegram Send #2 (Bot B)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4000,
+        -300
+      ],
+      "alwaysOutputData": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "6Lj1leUc9xjPNSlr",
+          "name": "Telegram account Vorlage"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "-1002267652777",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "id": "c0cafafb-5d51-422c-8104-ec1773f17f3a",
+      "name": "Telegram Send #3 (Bot A)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2160,
+        -180
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "6Lj1leUc9xjPNSlr",
+          "name": "Telegram account Vorlage"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "-10022676",
+        "text": "={{ $json.text }}",
+        "additionalFields": {}
+      },
+      "id": "2c8f8fff-683d-43c8-95fe-994d1996ae0e",
+      "name": "Telegram Send #4 (Bot B)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        5260,
+        120
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "6Lj1leUc9xjPNSlr",
+          "name": "Telegram account Vorlage"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "frequencyPenalty": 0.2,
+          "temperature": 1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        3340,
+        440
+      ],
+      "id": "e5eef6b9-a935-4349-98e3-33165ccc95c8",
+      "name": "OpenAI Chat Model (A3)",
+      "credentials": {
+        "openAiApi": {
+          "id": "gPZPGEpPhjBdo14S",
+          "name": "OpenAi Key Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {
+          "responseFormat": "text"
+        }
+      },
+      "id": "1ded9eb7-9ff6-435a-a40d-3b7a8d42a373",
+      "name": "OpenAI Chat Model (A3)2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        1720,
+        500
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "gPZPGEpPhjBdo14S",
+          "name": "OpenAi Key Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {
+          "responseFormat": "text"
+        }
+      },
+      "id": "0eb32da7-954b-46f3-9034-dab6bc11218a",
+      "name": "OpenAI Chat Model (B2)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        3560,
+        560
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "gPZPGEpPhjBdo14S",
+          "name": "OpenAi Key Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-4-turbo",
+        "options": {
+          "frequencyPenalty": 0.2,
+          "temperature": 1
+        }
+      },
+      "id": "ab5f11da-98d2-4d9e-8496-0ceb712900e8",
+      "name": "OpenAI Chat Model (A1)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        1460,
+        280
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "openAiApi": {
+          "id": "gPZPGEpPhjBdo14S",
+          "name": "OpenAi Key Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "frequencyPenalty": 0.2,
+          "responseFormat": "text",
+          "temperature": 0.9
+        }
+      },
+      "id": "380fcf9e-11e1-4b4c-9063-1c9c28f3292e",
+      "name": "OpenAI Chat Model (A2)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        2340,
+        380
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "openAiApi": {
+          "id": "gPZPGEpPhjBdo14S",
+          "name": "OpenAi Key Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionKey": "={{ $('Telegram Trigger (Main)').first().json.message.chat.id }}\n",
+        "contextWindowLength": 100000000000000000
+      },
+      "id": "2d749c3e-828c-4cfe-b006-0858c46fa3b9",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        3200,
+        1260
+      ],
+      "typeVersion": 1,
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "listId": "67a9c2ff36125d723d2",
+        "name": "Neu",
+        "description": "={{ $json.text }}",
+        "additionalFields": {
+          "dueComplete": false
+        }
+      },
+      "id": "f07d90fc-efb0-4c73-b1cf-6026fb6bb9d3",
+      "name": "Kurse",
+      "type": "n8n-nodes-base.trello",
+      "typeVersion": 1,
+      "position": [
+        5280,
+        -140
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "trelloApi": {
+          "id": "wJHxLOvK5xuopdki",
+          "name": "Trello account"
+        }
+      },
+      "notes": "{\n  \"agent\": \"Agent 4\",\n  \"datum\": \"2023-12-15\",\n  \"text\": \"### Einleitung\\n\\nIn der heutigen digitalen Ära ist LinkedIn weit mehr als nur eine Plattform für Berufstätige; es ist ein unverzichtbares Werkzeug zur Förderung von Wertschöpfung in Deutschland, insbesondere im Kontext der künstlichen Intelligenz (KI). Unternehmen haben hier die Möglichkeit, nicht nur Fachkräfte im Bereich KI zu identifizieren, sondern auch aktiv an der Schnittstelle von Innovation und Expertise zu wirken.\\n\\n### Die Rolle von KI auf LinkedIn\\n\\nKünstliche Intelligenz fungiert als Motor der digitalen Transformation, und LinkedIn ist die Bühne, auf der dieser Wandel stattfindet. Hier sind einige zentrale Vorteile der Nutzung von LinkedIn zur Steigerung der Wertschöpfung durch KI:\\n\\n- Vernetzung: Direkter Zugang zu führenden Köpfen und Innovatoren in der Branche.\\n- Wissensaustausch: Fachartikel, Diskussionen und Webinare fördern den Austausch wertvoller Informationen.\\n- Rekrutierung: Durch zielgerichtete Ansprache können Unternehmen die besten Talente für ihre KI-Initiativen gewinnen.\\n\\n### Strategische Nutzung von LinkedIn\\n\\nUnternehmen, die LinkedIn strategisch nutzen, können folgende Maßnahmen ergreifen:\\n\\n1. Gruppen und Foren: Initiieren Sie oder treten Sie speziellen Gruppen bei, die sich auf KI konzentrieren. Hier können Fachdiskussionen entstehen und wertvolle Kontakte geknüpft werden.\\n2. Content-Marketing: Teilen Sie hochwertige Inhalte, die aktuelle Trends und Technologien im Bereich KI beleuchten. Das fördert nicht nur Ihre Sichtbarkeit, sondern positioniert Ihr Unternehmen auch als Thought Leader in der Branche.\\n3. Webinare und Events: Nutzen Sie LinkedIn Events, um Online-Webinare zu veranstalten. Diese können sich speziell mit der Implementierung sowie den Auswirkungen von KI auf verschiedene Branchen befassen.\\n\\n### Praxisbeispiele für erfolgreiche Nutzung\\n\\n- Beispiel 1: Das Unternehmen X hat eine LinkedIn-Kampagne gestartet, um Expertenmeinungen über die Herausforderungen und Chancen von KI in der Automobilbranche zu sammeln. Dies führte zu einer lebhaften Diskussion und neuen geschäftlichen Partnerschaften.\\n- Beispiel 2: Die Firma Y veranstaltet monatliche Webinare zur Anwendung von KI in der Fertigungstechnik, wodurch sie nicht nur Wissen teilt, sondern auch als Anlaufstelle für Fachleute gilt.\\n\\n### Häufige Fehler vermeiden\\n\\nUm effektiv auf LinkedIn präsent zu sein und die Vorteile voll auszuschöpfen, sollten Unternehmen folgende häufige Fehler vermeiden:\\n\\n- Unzureichende Zielgruppenanalyse: Ohne genaue Kenntnis Ihrer Zielgruppe bleibt die Kommunikation ineffektiv.\\n- Mangelnde Konsistenz: Regelmäßige Posts sind unerlässlich; ein unaktives Profil führt schnell zu einem Verlust an Sichtbarkeit.\\n- Verpasste Chancen zur Analyse: Nutzen Sie LinkedIn Analytics, um den Erfolg Ihrer Posts zu messen und Ihre Strategie anzupassen.\\n\\n### Fazit\\n\\nLinkedIn ist ein unverzichtbares Instrument für Unternehmen in Deutschland, die im Bereich künstliche Intelligenz wertschöpfend tätig sein möchten. Durch proaktive Nutzung der Plattform können Firmen nicht nur ihre Netzwerke erweitern, sondern auch ihre Innovationskraft sowie Marktposition stärken. Nutzen Sie die Möglichkeiten von LinkedIn als Schlüssel zur Zukunft!\\n\\n### Weiterführende Links\\n\\n- LinkedIn für Unternehmen\\n- Studie: Künstliche Intelligenz in Deutschland\",\n  \"tags\": [\n    \"LinkedIn\"\n  ],\n  \"memory\": \" \"\n}\n"
+    },
+    {
+      "parameters": {
+        "listId": "67617009f5289dbd44b19187",
+        "name": "Mail",
+        "description": "={{ $json[\"output\"].join(\"\\n\") }}",
+        "additionalFields": {
+          "dueComplete": false
+        }
+      },
+      "id": "c4a97a4e-4928-41b8-88f4-26acbebdd5b4",
+      "name": "Mail",
+      "type": "n8n-nodes-base.trello",
+      "typeVersion": 1,
+      "position": [
+        5780,
+        -360
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "trelloApi": {
+          "id": "kImKfHLzmqWflpbU",
+          "name": "Trello Telegram"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "listId": "6769713ad967360af4632ea1",
+        "name": "Automatisierung",
+        "description": "={{ $json[\"output\"].join(\"\\n\") }}",
+        "additionalFields": {
+          "dueComplete": false
+        }
+      },
+      "id": "55b256a6-1612-40c4-b6a2-7a09b4f9e9e0",
+      "name": "Automatisierung",
+      "type": "n8n-nodes-base.trello",
+      "typeVersion": 1,
+      "position": [
+        5780,
+        -180
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "trelloApi": {
+          "id": "kImKfHLzmqWflpbU",
+          "name": "Trello Telegram"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "listId": "67617004f84c39b390b1dca6",
+        "name": "LinkedIn",
+        "description": "={{ $json.output[4] }}",
+        "additionalFields": {
+          "dueComplete": false
+        }
+      },
+      "id": "4f853bb4-316e-4d81-a1b2-e14106eba7ac",
+      "name": "Webinare",
+      "type": "n8n-nodes-base.trello",
+      "typeVersion": 1,
+      "position": [
+        5800,
+        0
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "trelloApi": {
+          "id": "kImKfHLzmqWflpbU",
+          "name": "Trello Telegram"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "listId": "6761705147bb2426ddddf11e",
+        "name": "Marketing",
+        "description": "={{ $json[\"output\"].join(\"\\n\") }}",
+        "additionalFields": {
+          "dueComplete": false
+        }
+      },
+      "id": "d4594594-4b4f-45dd-b50f-cc313d4683eb",
+      "name": "Marketing",
+      "type": "n8n-nodes-base.trello",
+      "typeVersion": 1,
+      "position": [
+        5800,
+        180
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "trelloApi": {
+          "id": "kImKfHLzmqWflpbU",
+          "name": "Trello Telegram"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "listId": "67616ffa178383551040cf08",
+        "name": "LinkedIn",
+        "description": "={{ $json[\"output\"].join(\"\\n\") }}",
+        "additionalFields": {
+          "dueComplete": false
+        }
+      },
+      "id": "cf0c8999-8468-449d-be3d-782aed4d255c",
+      "name": "LinkedIn",
+      "type": "n8n-nodes-base.trello",
+      "typeVersion": 1,
+      "position": [
+        5800,
+        380
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "trelloApi": {
+          "id": "kImKfHLzmqWflpbU",
+          "name": "Trello Telegram"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8",
+          "mode": "list",
+          "cachedResultName": "Vorlage Speicher Bots",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Speicher Bot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Memory",
+              "lookupValue": "={{ $json.Memory }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1db3f739-066e-4062-a5af-a0cd249341cb",
+      "name": "Google Sheets11",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        1660,
+        220
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LwQp4eD5nZmo6utb",
+          "name": "Google Sheets AfA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8",
+          "mode": "list",
+          "cachedResultName": "Vorlage Speicher Bots",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Speicher Bot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Memory",
+              "lookupValue": "={{ $json.Memory }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4b1b5046-60c7-4878-bf58-ba666655363e",
+      "name": "Speicher",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        2720,
+        400
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LwQp4eD5nZmo6utb",
+          "name": "Google Sheets AfA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8",
+          "mode": "list",
+          "cachedResultName": "Vorlage Speicher Bots",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Speicher Bot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Memory": "={{ $json.output }}",
+            "output": "={{ $json.output }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Memory",
+              "displayName": "Memory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c5c28f28-75ad-4c2b-8f33-efbf45527ac9",
+      "name": "Speicher1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        3160,
+        20
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LwQp4eD5nZmo6utb",
+          "name": "Google Sheets AfA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8",
+          "mode": "list",
+          "cachedResultName": "Vorlage Speicher Bots",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Speicher Bot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Memory": "={{ $json.output[0] }}",
+            "output": "={{ $json.output[0] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Memory",
+              "displayName": "Memory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6f929f23-97ed-4d95-ae24-f7392e61a606",
+      "name": "speicher",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        4120,
+        -80
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LwQp4eD5nZmo6utb",
+          "name": "Google Sheets AfA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8",
+          "mode": "list",
+          "cachedResultName": "Vorlage Speicher Bots",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Speicher Bot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "output": "={{ $json.output }}",
+            "Memory": "={{ $json.output }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Memory",
+              "displayName": "Memory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "361afac2-93c5-41f8-b1c4-52303dd033a7",
+      "name": "Speicher2",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        5280,
+        -440
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LwQp4eD5nZmo6utb",
+          "name": "Google Sheets AfA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8",
+          "mode": "list",
+          "cachedResultName": "Vorlage Speicher Bots",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Speicher Bot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Memory": "={{ $json.output }}"
+          },
+          "matchingColumns": [
+            "Memory"
+          ],
+          "schema": [
+            {
+              "id": "Memory",
+              "displayName": "Memory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "03817862-260c-4759-882d-26316ffe7f53",
+      "name": "Speicher3",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2280,
+        20
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LwQp4eD5nZmo6utb",
+          "name": "Google Sheets AfA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8",
+          "mode": "list",
+          "cachedResultName": "Vorlage Speicher Bots",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Speicher Bot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Memory",
+              "lookupValue": "={{ $json.Memory }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2cb2ba2b-facb-402a-bedb-7e4ba05e5311",
+      "name": "Speicher4",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        3540,
+        460
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LwQp4eD5nZmo6utb",
+          "name": "Google Sheets AfA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8",
+          "mode": "list",
+          "cachedResultName": "Vorlage Speicher Bots",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Speicher Bot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Memory",
+              "lookupValue": "={{ $json.Memory }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f0d22764-eaa5-4e82-a2b1-a0d6d19e10a5",
+      "name": "Speicher5",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        4380,
+        380
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "LwQp4eD5nZmo6utb",
+          "name": "Google Sheets AfA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output[0] }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6505563b-033f-4aec-873d-7159412c491b",
+      "name": "Switch Next Agent",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        3860,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Daten aus den möglichen Variablen beziehen\nlet rawData = this.output || this.items || this.final_output || {};\n\n// Falls rawData ein Array ist, verwende den ersten Eintrag\nif (Array.isArray(rawData)) {\n    rawData = rawData[0];\n}\n\n// Falls rawData als String vorliegt, versuche ihn zu parsen\nif (typeof rawData === \"string\") {\n    try {\n        rawData = JSON.parse(rawData);\n    } catch (e) {\n        return [{ text: \"Fehler: JSON-Parsing fehlgeschlagen.\" }];\n    }\n}\n\n// 2. (Hinweis: Der Teil, der auf {\"json\": {\"output\": [ ... prüft, wurde entfernt)\n\n// 3. Text extrahieren\nif (!rawData.text || typeof rawData.text !== \"string\") {\n    return [{\n      text: JSON.stringify(rawData, null, 2)\n    }];\n}\nlet finalText = rawData.text;\n\n// 4. Falls noch Escape-Sequenzen vorhanden sind, versuche sie mit JSON.parse zu decodieren\nif (finalText.indexOf(\"\\\\n\") !== -1) {\n    try {\n        // Wandelt \\n-Escape-Sequenzen in echte Newlines um\n        finalText = JSON.parse('\"' + finalText.replace(/\"/g, '\\\\\"') + '\"');\n    } catch (e) {\n        // Fallback: einfache Ersetzung\n        finalText = finalText.replace(/\\\\n/g, \"\\n\");\n    }\n}\n\n// 5. Erzwinge, dass zwischen Absätzen doppelte Newlines stehen (Markdown-Anforderung)\nfinalText = finalText.replace(/\\n(?!\\n)/g, \"\\n\\n\");\n\n// 6. Gib ausschließlich ein Objekt mit dem text-Feld zurück\nreturn [{ text: finalText.trim() }];\n"
+      },
+      "id": "babb6692-0661-46cd-b38f-9ec71554f447",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4820,
+        -20
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output[5] }}{{ $json.output[4] }}",
+                    "rightValue": "=Kurse",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0f6a6d9c-d821-4569-a1f5-c0f4f5aa393c",
+                    "leftValue": "={{ $json.output[5] }}{{ $json.output[4] }}",
+                    "rightValue": "Mail",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f640503d-eff5-46ea-b4ec-6583ffae1eda",
+                    "leftValue": "={{ $json.output[5] }}{{ $json.output[4] }}",
+                    "rightValue": "Automatisierung",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f52d2d22-7c74-4287-a4fb-609f6e0101fd",
+                    "leftValue": "={{ $json.output[5] }}{{ $json.output[4] }}",
+                    "rightValue": "Webinare",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "da58b016-3f7e-4845-8b74-ec485fa4e542",
+                    "leftValue": "={{ $json.output[5] }}{{ $json.output[4] }}",
+                    "rightValue": "Marketing",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d9bfc45c-6d4f-4550-aa21-2969972dcdf3",
+                    "leftValue": "={{ $json.text }}{{ $json.tags[0] }}",
+                    "rightValue": "LinkedIn",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c75fd53c-454c-4e4e-86b4-89ee50f8da9c",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        5520,
+        -40
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Hier die optimierte Fassung von Agent 2:\n{{ $json.output }}\n\nWeitere Memory-Einträge:\n{{ $json.Memory }}\nAgent 2 hat einen optimierten Textblock zum Keyword \"[Gib hier das relevante Keyword ein]\" erstellt (zur Auswahl: Marketing, Mail, Automatisierung, Webinare, Kurse, LinkedIn).\n\nThema: \"{{ $json.output }}\"\nKeyword: \"[Gib hier das relevante Keyword ein]\"\n\nBitte führe ein **gründliches Lektorat** und einen sprachlichen Feinschliff des Textblocks durch – **ausschließlich** für das angegebene Keyword \"[Gib hier das relevante Keyword ein]\". Beachte dazu folgende Vorgaben:{{ $json.output }}\n\n1. **Sprachliche Überarbeitung:**\n   - Korrigiere akribisch Rechtschreibung, Grammatik, Satzbau, Stil und Ausdruck.\n   - Ergänze gegebenenfalls erläuternde Beispiele, Definitionen und präzise Formulierungen, um eventuelle Unklarheiten auszuschließen – jedoch _ausschließlich_ im Kontext von \"[Gib hier das relevante Keyword ein]\".\n\n2. **Erhalt der Blockstruktur:**\n   - Stelle sicher, dass der Textblock als eigenständiger, abgeschlossener Abschnitt erhalten bleibt.\n   - Es dürfen keine Inhalte anderer Keywords integriert werden.\n\n3. **Formatierung & JSON Output:**\n   - Bitte verwende folgendes Format und liefere den Output als JSON:\n     ```json\n     {\n       \"agent\": \"Agent 3\",\n       \"datum\": \"2023-12-15\",\n       \"keyword\": \"[Gib hier das relevante Keyword ein]\",\n       \"text\": \"[Hier folgt der vollständig lektorierte und sprachlich optimierte Textblock ausschließlich zum Keyword '[Gib hier das relevante Keyword ein]'.]\",\n       \"tags\": [\"[Gib hier das relevante Keyword ein]\"],\n       \"memory\": \"{{ $json.Memory }}\"\n     ```\n   - Der lektorierte Text muss so strukturiert sein, dass er bei späteren Ergänzungen zu demselben Keyword problemlos erweitert werden kann.\n\nBitte achte darauf, **ausschließlich** den Textblock zum Keyword \"[Gib hier das relevante Keyword ein]\" zu bearbeiten.\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "[Agent 3 | {Datum/Uhrzeit}]\n--- Lektorat / Änderungen ---\nDu bist Agent 3 und deine Aufgabe ist es, den von Agent 2 optimierten Textblock einer **detaillierten sprachlichen Überarbeitung** zu unterziehen. **WICHTIG:**  \nBearbeite _ausschließlich_ den Textblock, der dem aktuell eingegebenen Keyword entspricht (z. B. \"Mail\"). Es dürfen keinerlei Inhalte anderer Keywords einfließen.\n\n**Deine detaillierten Aufgaben:**\n\n1. **Gründliche sprachliche Überarbeitung:**\n   - Korrigiere akribisch Rechtschreibung, Grammatik, Satzbau, Stil und Ausdruck.\n   - Ergänze, wo notwendig, erläuternde Beispiele, Definitionen und präzise Formulierungen, um Unklarheiten zu vermeiden – _jedoch ausschließlich_ im Kontext des angegebenen Keywords.\n   - Sorge dafür, dass der Text flüssig, professionell und inhaltlich vollständig ist.\n\n2. **Erhalt der Blockstruktur:**\n   - Der Textblock muss als eigenständiger, abgeschlossener Abschnitt erhalten bleiben.\n   - Inhalte anderer Themen dürfen keinesfalls integriert werden.\n\n3. **Exakte Formatierung:**\n   - Verwende das folgende Format:\n     ```\n     [Agent 3 | Datum]\n     --- Lektorat / Änderungen ---\n     --- Finaler Text (pro Keyword) ---\n     -- [Keyword] --\n     [Hier folgt der vollständig lektorierte Textblock _ausschließlich_ zum angegebenen Keyword, z. B. \"Mail\".]\n     \n     --- Tags ---\n     #[Keyword]\n     ```\n   - Der lektorierte Text soll jederzeit erweiterbar sein, ohne die klare Themenabgrenzung zu verlieren.\n\n--- Finaler Text ---\n[Erstelle hier den vollständig lektorierten und sprachlich optimierten Textblock für das aktuell eingegebene Keyword.]\n\n--- Tags ---\n#[eingabe-keyword]\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        3400,
+        0
+      ],
+      "id": "67047e86-db38-4813-91c8-20a6e5555160",
+      "name": "AI Agent B- Creativity"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Daten aus den möglichen Variablen beziehen\nlet rawData = this.output || this.items || this.final_output || {};\nif (Array.isArray(rawData)) {\n    rawData = rawData[0];\n}\nif (rawData.json) {\n    rawData = rawData.json;\n}\n\n// 2. Falls rawData ein output-Feld enthält (als Array), extrahiere den ersten Eintrag\nif (rawData.output && Array.isArray(rawData.output) && rawData.output.length > 0) {\n    let outputStr = rawData.output[0];\n    if (typeof outputStr === \"string\") {\n        // Ersetze unescapete Newlines durch korrekte Escape-Sequenzen\n        outputStr = outputStr.replace(/\\r?\\n/g, \"\\\\n\");\n        try {\n            rawData = JSON.parse(outputStr);\n        } catch (e) {\n            return [{ text: \"Fehler: JSON-Parsing des output-Feldes fehlgeschlagen.\" }];\n        }\n    } else {\n        rawData = rawData.output[0];\n    }\n}\n\n// 3. Text extrahieren\nif (!rawData.text || typeof rawData.text !== \"string\") {\n    return [{ text: \"Fehler: Kein `text`-Eintrag gefunden.\\nDebug-Info:\\n\" + JSON.stringify(rawData, null, 2) }];\n}\nlet finalText = rawData.text;\n\n// 4. Escape-Sequenzen in echte Newlines umwandeln\nfinalText = finalText.replace(/\\\\n/g, \"\\n\");\n\n// 5. Erzwinge, dass zwischen einzelnen Newlines doppelte Newlines stehen\nfinalText = finalText.replace(/\\n(?!\\n)/g, \"\\n\\n\");\n\n// 6. Nur den Text ab \"### Einleitung\" verwenden (falls vorhanden)\nlet startIndex = finalText.indexOf(\"### Einleitung\");\nif (startIndex !== -1) {\n    finalText = finalText.substring(startIndex);\n}\n\n// 7. Entferne alle verbleibenden Backslashes\nfinalText = finalText.replace(/\\\\/g, \"\");\n\n// 8. Gib ausschließlich ein JSON-Objekt mit dem text-Feld zurück\nreturn [{ text: finalText.trim() }];\n"
+      },
+      "id": "50688ebb-e3c2-4e52-be2d-d00094a5dd05",
+      "name": "Code2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4980,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Daten aus den möglichen Variablen beziehen\nlet rawData = this.output || this.items || this.final_output || {};\n\n// Falls rawData ein Array ist, verwende den ersten Eintrag\nif (Array.isArray(rawData)) {\n    rawData = rawData[0];\n}\n\n// Falls rawData als String vorliegt, versuche ihn zu parsen\nif (typeof rawData === \"string\") {\n    try {\n        rawData = JSON.parse(rawData);\n    } catch (e) {\n        return [{ text: \"Fehler: JSON-Parsing fehlgeschlagen.\" }];\n    }\n}\n\n// 2. (Hinweis: Der Teil, der auf {\"json\": {\"output\": [ ... prüft, wurde entfernt)\n\n// 3. Text extrahieren\nif (!rawData.text || typeof rawData.text !== \"string\") {\n    return [{\n      text: JSON.stringify(rawData, null, 2)\n    }];\n}\nlet finalText = rawData.text;\n\n// 4. Falls noch Escape-Sequenzen vorhanden sind, versuche sie mit JSON.parse zu decodieren\nif (finalText.indexOf(\"\\\\n\") !== -1) {\n    try {\n        // Wandelt \\n-Escape-Sequenzen in echte Newlines um\n        finalText = JSON.parse('\"' + finalText.replace(/\"/g, '\\\\\"') + '\"');\n    } catch (e) {\n        // Fallback: einfache Ersetzung\n        finalText = finalText.replace(/\\\\n/g, \"\\n\");\n    }\n}\n\n// 5. Erzwinge, dass zwischen Absätzen doppelte Newlines stehen (Markdown-Anforderung)\nfinalText = finalText.replace(/\\n(?!\\n)/g, \"\\n\\n\");\n\n// 6. Gib ausschließlich ein Objekt mit dem text-Feld zurück\nreturn [{ text: finalText.trim() }];\n"
+      },
+      "id": "31037364-c444-4944-a597-4a02c553811c",
+      "name": "Code3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4800,
+        120
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Daten aus den möglichen Variablen beziehen\nlet rawData = this.output || this.items || this.final_output || {};\nif (Array.isArray(rawData)) {\n    rawData = rawData[0];\n}\nif (rawData.json) {\n    rawData = rawData.json;\n}\n\n// 2. Falls rawData ein output-Feld enthält (als Array), extrahiere den ersten Eintrag\nif (rawData.output && Array.isArray(rawData.output) && rawData.output.length > 0) {\n    let outputStr = rawData.output[0];\n    if (typeof outputStr === \"string\") {\n        // Ersetze unescapete Newlines durch korrekte Escape-Sequenzen\n        outputStr = outputStr.replace(/\\r?\\n/g, \"\\\\n\");\n        try {\n            rawData = JSON.parse(outputStr);\n        } catch (e) {\n            return [{ text: \"Fehler: JSON-Parsing des output-Feldes fehlgeschlagen.\" }];\n        }\n    } else {\n        rawData = rawData.output[0];\n    }\n}\n\n// 3. Text extrahieren\nif (!rawData.text || typeof rawData.text !== \"string\") {\n    return [{ text: \"Fehler: Kein `text`-Eintrag gefunden.\\nDebug-Info:\\n\" + JSON.stringify(rawData, null, 2) }];\n}\nlet finalText = rawData.text;\n\n// 4. Escape-Sequenzen in echte Newlines umwandeln\nfinalText = finalText.replace(/\\\\n/g, \"\\n\");\n\n// 5. Erzwinge, dass zwischen einzelnen Newlines doppelte Newlines stehen\nfinalText = finalText.replace(/\\n(?!\\n)/g, \"\\n\\n\");\n\n// 6. Nur den Text ab \"### Einleitung\" verwenden (falls vorhanden)\nlet startIndex = finalText.indexOf(\"### Einleitung\");\nif (startIndex !== -1) {\n    finalText = finalText.substring(startIndex);\n}\n\n// 7. Entferne alle verbleibenden Backslashes\nfinalText = finalText.replace(/\\\\/g, \"\");\n\n// 8. Gib ausschließlich ein JSON-Objekt mit dem text-Feld zurück\nreturn [{ text: finalText.trim() }];\n"
+      },
+      "id": "da3d4138-9a71-451f-b84f-48deab60bd7a",
+      "name": "Code4",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4960,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Daten aus den möglichen Variablen beziehen\nlet rawData = this.output || this.items || this.final_output || {};\n\n// Falls rawData ein Array ist, verwende den ersten Eintrag\nif (Array.isArray(rawData)) {\n    rawData = rawData[0];\n}\n\n// Falls rawData als String vorliegt, versuche ihn zu parsen\nif (typeof rawData === \"string\") {\n    try {\n        rawData = JSON.parse(rawData);\n    } catch (e) {\n        return [{ text: \"Fehler: JSON-Parsing fehlgeschlagen.\" }];\n    }\n}\n\n// 2. (Hinweis: Der Teil, der auf {\"json\": {\"output\": [ ... prüft, wurde entfernt)\n\n// 3. Text extrahieren\nif (!rawData.text || typeof rawData.text !== \"string\") {\n    return [{\n      text: JSON.stringify(rawData, null, 2)\n    }];\n}\nlet finalText = rawData.text;\n\n// 4. Falls noch Escape-Sequenzen vorhanden sind, versuche sie mit JSON.parse zu decodieren\nif (finalText.indexOf(\"\\\\n\") !== -1) {\n    try {\n        // Wandelt \\n-Escape-Sequenzen in echte Newlines um\n        finalText = JSON.parse('\"' + finalText.replace(/\"/g, '\\\\\"') + '\"');\n    } catch (e) {\n        // Fallback: einfache Ersetzung\n        finalText = finalText.replace(/\\\\n/g, \"\\n\");\n    }\n}\n\n// 5. Erzwinge, dass zwischen Absätzen doppelte Newlines stehen (Markdown-Anforderung)\nfinalText = finalText.replace(/\\n(?!\\n)/g, \"\\n\\n\");\n\n// 6. Gib ausschließlich ein Objekt mit dem text-Feld zurück\nreturn [{ text: finalText.trim() }];\n"
+      },
+      "id": "a65b0d75-39ea-4ae4-a6d4-ae1257c4d055",
+      "name": "Code5",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4820,
+        -160
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Daten aus den möglichen Variablen beziehen\nlet rawData = this.output || this.items || this.final_output || {};\nif (Array.isArray(rawData)) {\n    rawData = rawData[0];\n}\nif (rawData.json) {\n    rawData = rawData.json;\n}\n\n// 2. Falls rawData ein output-Feld enthält (als Array), extrahiere den ersten Eintrag\nif (rawData.output && Array.isArray(rawData.output) && rawData.output.length > 0) {\n    let outputStr = rawData.output[0];\n    if (typeof outputStr === \"string\") {\n        // Ersetze unescapete Newlines durch korrekte Escape-Sequenzen\n        outputStr = outputStr.replace(/\\r?\\n/g, \"\\\\n\");\n        try {\n            rawData = JSON.parse(outputStr);\n        } catch (e) {\n            return [{ text: \"Fehler: JSON-Parsing des output-Feldes fehlgeschlagen.\" }];\n        }\n    } else {\n        rawData = rawData.output[0];\n    }\n}\n\n// 3. Text extrahieren\nif (!rawData.text || typeof rawData.text !== \"string\") {\n    return [{ text: \"Fehler: Kein `text`-Eintrag gefunden.\\nDebug-Info:\\n\" + JSON.stringify(rawData, null, 2) }];\n}\nlet finalText = rawData.text;\n\n// 4. Escape-Sequenzen in echte Newlines umwandeln\nfinalText = finalText.replace(/\\\\n/g, \"\\n\");\n\n// 5. Erzwinge, dass zwischen einzelnen Newlines doppelte Newlines stehen\nfinalText = finalText.replace(/\\n(?!\\n)/g, \"\\n\\n\");\n\n// 6. Nur den Text ab \"### Einleitung\" verwenden (falls vorhanden)\nlet startIndex = finalText.indexOf(\"### Einleitung\");\nif (startIndex !== -1) {\n    finalText = finalText.substring(startIndex);\n}\n\n// 7. Entferne alle verbleibenden Backslashes\nfinalText = finalText.replace(/\\\\/g, \"\");\n\n// 8. Gib ausschließlich ein JSON-Objekt mit dem text-Feld zurück\nreturn [{ text: finalText.trim() }];\n"
+      },
+      "id": "c7721640-72ef-43de-a58c-d5d2061b272d",
+      "name": "Code6",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4980,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\n---\n\n### Angepasster User-Prompt\n\n```plaintext\n---\nHier die lektorierte Version von Agent 3:\n{{ $json.output }}\n\nMemory-Daten:\n{{ $json.Memory }}\n\n**Thema:** {{ $json.output }}\n\n**Keyword:** \"{{ $json.Memory }}\" (z. B. \"Mail\")\n\n---\n\nBitte führe den **finalen, detailgenauen Faktencheck** für das angegebene Keyword \"[Gib hier das relevante Keyword ein]\" durch und erteile die Freigabe.\n\n**Wichtige Regeln für die Bearbeitung:**\n\n1️⃣ **Faktencheck & Optimierung:**\n   - Prüfe den vorliegenden Textblock auf inhaltliche Korrektheit, Vollständigkeit und Praxisrelevanz.\n   - Ergänze fehlende Informationen (z. B. Tools, Links, Beispiele) falls notwendig.\n   - Nutze die Memory-Daten nur zur Referenz – sie dürfen **nicht** in den finalen Text übernommen werden.\n\n2️⃣ **Freigabe des finalen Textblocks:**\n   - Gib ausschließlich den final geprüften Text als ein **einfaches JSON-Objekt** zurück.\n   - **Es darf nur ein einziges Feld `text` vorhanden sein.** KEINE zusätzlichen Felder, KEINE Arrays, KEINE Memory-Daten und **kein `output`‑Feld.**\n\n3️⃣ **Keine Vermischung anderer Keywords:**\n   - Es dürfen ausschließlich Inhalte zum angegebenen Keyword enthalten sein.\n   - Falls andere Keywords auftauchen, entferne oder ersetze sie durch relevante Informationen.\n\n4️⃣ **Formatierungsrichtlinien – Trello-kompatibles Markdown:**\n   - Überschriften sollen mit `###` oder `##` formatiert werden.\n   - Zwischen Absätzen müssen **doppelte Zeilenumbrüche (`\\n\\n`)** eingefügt werden.\n   - Listenpunkte beginnen immer in einer neuen Zeile (z. B. `- Listenpunkt 1`).\n   - **KEINE zusätzlichen Formatierungen oder unnötigen JSON-Blöcke!**\n\n---\n\n**Finale Ausgabeanforderung – Gib exakt dieses JSON-Format zurück:**\n```json\n{\n  \"text\": \"Hier der finale geprüfte Text.\\n\\nAbsatz 2\\n\\n- Listenpunkt 1\\n- Listenpunkt 2\"\n}\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "[Agent 4 | {Datum/Uhrzeit}]\n--- Letzter Check / Änderungen ---\nDu bist Agent 4 und führst den **finalen, detailgenauen Faktencheck** durch, bevor der Textblock freigegeben wird.\n\n**WICHTIG:**\n- Bearbeite ausschließlich den Textblock, der dem aktuell eingegebenen Keyword entspricht (z. B. \"Mail\").\n- Gib ausschließlich ein JSON-Objekt mit **einem einzigen `text`‑Feld** zurück.\n- **KEINE Arrays, KEINE zusätzlichen Felder, KEINE Memory-Daten, KEINE Kommentare oder Metadaten.**\n- Falls ein `output`‑Feld existiert, musst du es ignorieren – es darf in der finalen Ausgabe nicht erscheinen.\n- Alle Absätze müssen mit **doppelten Zeilenumbrüchen (`\\n\\n`)** voneinander getrennt werden.\n- Listenpunkte sollen in separaten Zeilen stehen.\n\n**Finale Ausgabeanforderung – Gib exakt dieses JSON-Format zurück:**\n```json\n{\n  \"text\": \"Hier der finale bereinigte Text.\\n\\nAbsatz 2\\n\\n- Listenpunkt 1\\n- Listenpunkt 2\"\n}\n"
+        }
+      },
+      "id": "2cee9823-cb7a-46e1-86f9-ac5a21275386",
+      "name": "AI Agent A3 Final merge",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        4340,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3f9be9d2-ac34-4e96-9fb5-6a95f6fbcbc4",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "640a2c8a-d7a4-4e31-8d64-ae07b810ef6b",
+      "name": "Switch Check Choices1",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1280,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "array",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b538a89d-94cc-43b0-a5bd-551eb006609e",
+      "name": "Switch Check Choices2",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2040,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Agent 1 hat folgenden Rohentwurf erzeugt:\n{{ $json.Memory }}\n\nWeitere Memory-Einträge:\n{{ $json.Memory }}\n\nAgent 1 hat einen Rohentwurf erstellt, der sich ausschließlich auf das Keyword \"[Gib hier das relevante Keyword ein]\" bezieht (zur Auswahl: Marketing, Mail, Automatisierung, Webinare, Kurse, LinkedIn).\n\nThema: {{ $json.Memory }}\"\nKeyword: \"{{ $('OpenAI').item.json.text }}\"\n\nBitte optimiere den von Agent 1 erzeugten Textblock hinsichtlich Markenstil und Struktur – **ausschließlich** für das angegebene Keyword \"{{ $('OpenAI').item.json.text }}\". Beachte dazu folgende Anweisungen:{{ $json.Memory }}\n\n1. **Ausschließliche Bearbeitung:**\n   - Bearbeite _nur_ den Textblock, der zum Keyword \"erstelle da zu das json\" gehört. Es dürfen keine Inhalte anderer Keywords integriert werden.\n\n2. **Stilistische Anforderungen:**\n   - Verbessere den sprachlichen Ausdruck und sorge für einen einheitlichen, professionellen Ton, der zur Zielgruppe passt.\n   - Gliedere den Text in sinnvolle Abschnitte, füge Zwischenüberschriften, Bullet Points und nummerierte Listen ein, um die Lesbarkeit zu erhöhen.\n   - Ergänze den Text um zusätzliche Details, praxisnahe Beispiele, konkrete Tools, Fallstudien und weiterführende Links – _ausschließlich im Kontext von \"[Gib hier das relevante Keyword ein]\"_.\n\n3. **Formatierung & JSON Output:**\n   - Bitte verwende folgendes Format und liefere den Output als JSON:\n     ```json\n     {\n       \"agent\": \"Agent 2\",\n       \"datum\": \"2023-12-15\",\n       \"keyword\": \"[Gib hier das relevante Keyword ein]\",\n       \"text\": \"[Hier folgt der optimierte und erweiterte Textblock ausschließlich zum Keyword '[Gib hier das relevante Keyword ein]'.]\",\n       \"tags\": [\"[Keyword]\"],\n       \"memory\": \"{{ $json.Memory }}\"\n     }\n     ```\n   - Die Ausgabe muss klar strukturiert und abgegrenzt sein, sodass eine spätere Erweiterung problemlos möglich ist.\n\n4. **Erweiterbarkeit:**\n   - Falls später weitere Informationen zu diesem Keyword ergänzt werden, sollte der Textblock problemlos erweitert werden können, ohne dass Inhalte anderer Themen hinzukommen.\n\nBitte beachte, dass du **nur** den Block zum Keyword \"[Gib hier das relevante Keyword ein]\" bearbeiten und erweitern sollst.\n",
+        "options": {
+          "systemMessage": "[Agent 2 | {Datum/Uhrzeit}]\n--- Änderungen / Kommentare ---\nDu bist Agent 2 und deine Aufgabe ist es, den von Agent 1 erstellten Rohentwurf in Bezug auf Markenstil und Struktur zu verfeinern. **WICHTIG:**  \nDu arbeitest _ausschließlich_ mit dem Textblock, der dem aktuell eingegebenen Keyword entspricht (z. B. \"Mail\"). Es dürfen keinerlei Inhalte anderer Keywords (Marketing, Automatisierung, Webinare, Kurse, LinkedIn) integriert oder vermischt werden.\n\n**Deine detaillierten Aufgaben:**\n\n1. **Übernahme und Filterung:**\n   - Übernimm _nur_ den Textblock, der dem angegebenen Keyword entspricht.\n   - Stelle sicher, dass keinerlei Inhalte anderer Keywords vorhanden sind. Wenn nur \"Mail\" angegeben ist, darf _nur_ der Mail-Block bearbeitet werden.\n\n2. **Stilistische Optimierung und Erweiterung der Inhalte:**\n   - Verbessere den sprachlichen Ausdruck und passe den Ton exakt an die Zielgruppe an.\n   - Strukturiere den Text in sinnvolle Absätze, nutze Zwischenüberschriften, Bullet Points, und Nummerierungen, um die Lesbarkeit zu verbessern.\n   - Ergänze den Text um **zusätzliche Details, praxisnahe Beispiele, konkrete Tools, Fallstudien und weiterführende Links** – jedoch _ausschließlich im Kontext des angegebenen Keywords_.\n   - Achte darauf, dass spätere Ergänzungen zum gleichen Keyword nahtlos in diesen Block integriert werden, ohne dass fremde Themen erscheinen.\n\n3. **Erweiterung der Wortanzahl:**\n   - Falls nötig, erweitere den Textblock so, dass er über **500 Wörter** umfasst, um alle relevanten Aspekte des Themas ausführlich abzudecken.\n\n4. **Exakte Formatierung:**\n   - Nutze folgendes Format:\n     ```\n     [Agent 2 | Datum]\n     --- Änderungen / Kommentare ---\n     -- [Keyword] --\n     [Hier folgt der optimierte, erweiterte Textblock _ausschließlich_ zum angegebenen Keyword, z. B. \"Mail\".]\n     \n     --- Tags ---\n     #[Keyword]\n     ```\n   - Der Output muss klar strukturiert und abgegrenzt sein, sodass eine spätere Erweiterung problemlos möglich ist.\n\n--- Optimierter Text ---\n[Erstelle hier den vollständig optimierten Textblock für das aktuell eingegebene Keyword.]\n\n--- Tags ---\n#[eingabe-keyword]\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        2460,
+        20
+      ],
+      "id": "54e742ba-844f-4e89-97a1-f01062b7bfff",
+      "name": "AI Agent B-Strategy"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dc8951ec-0959-4e8e-ada5-646d3d45ac16",
+      "name": "Switch Check Choices",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2920,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Hier die letzten Memory-Einträge:\n{{ $json.text }}\n\nHinweis – Initialer Input:{{ $json.text }}\nIch gebe zunächst ausschließlich _ein_ Keyword ein, das als Grundlage für den gesamten Workflow dienen soll und das keyword genau ausgesprochen wird. Zur Auswahl stehen nur folgende Optionen:\n• Marketing  \n• Mailing  \n• Automatisierung  \n• Webinare  \n• Kurse  \n• LinkedIn\n\nThema: \"{{ $json.text }}\"\nKeyword: \"[Gib hier das relevante Keyword ein, z. B. Mail]\"\n\nBitte erstelle einen **extrem ausführlichen Erstentwurf** zum Thema \"{{ $json.text }}\" – aber _ausschließlich_ bezogen auf das angegebene Keyword \"[Gib hier das relevante Keyword ein]\". Beachte dazu folgende Vorgaben:\n\n1. **Kontext & Einschränkung:**\n   - Der Text soll sich _nur_ mit dem angegebenen Keyword befassen. Es dürfen keinerlei Inhalte zu den anderen Optionen einfließen.\n   - Der Entwurf soll alle relevanten Aspekte des Themas im Kontext des Keywords abdecken.\n\n2. **Erwartete Inhalte:**\n   - Erstelle einen Textblock, der mindestens **300–500 Wörter** umfasst. Bei komplexen Themen kann der Umfang auch deutlich größer (600–1000+ Wörter) sein.\n   - Integriere praxisnahe Beispiele, konkrete Tools, Schritt-für-Schritt-Anleitungen, Checklisten, häufige Fehlerquellen sowie weiterführende Links und Quellen.\n   - Der Text soll so strukturiert sein, dass er klar abgegrenzt und später bei Bedarf erweitert werden kann.\n\n3. **Formatierung & JSON Output:**\n   - Bitte verwende folgendes Format – der finale Output soll als JSON geliefert werden. Nutze die folgenden Felder:\n     - **agent**: Name des Agenten (z. B. \"Agent 1\")\n     - **datum**: Datum/Uhrzeit der Erstellung\n     - **keyword**: Das angegebene Keyword (z. B. \"Mail\")\n     - **text**: Der vollständige, ausführliche Textblock\n     - **tags**: Ein Array mit dem Keyword (z. B. [\"Mail\"])\n     - **memory**: Integriere die Memory-Daten (z. B. `{{ $json.text }}`)\n\n     Beispielhafte JSON-Struktur:\n     ```json\n     {\n       \"agent\": \"Agent 1\",\n       \"datum\": \"2023-12-15\",\n       \"keyword\": \"Mail\",\n       \"text\": \"[Hier ausschließlich Inhalte zum Keyword 'Mail': Erstelle eine vollständige E-Mail-Struktur (Betreff, Einleitung, Hauptteil, CTA, Beispiele, Tools etc.)]\",\n       \"tags\": [\"Mail\"],\n       \"memory\": \"{{ $json.text }}\"\n     }\n     ```\n\n4. **Zusätzliche Hinweise:**\n   - Erstelle ausschließlich den Textblock zum angegebenen Keyword. Warte auf weitere Ergänzungen, bevor zusätzliche Inhalte verarbeitet werden.\n   - Falls später weitere Details zu demselben Keyword folgen, soll der bestehende Block dynamisch erweitert werden – ohne Inhalte anderer Themen zu integrieren.\n\nBitte beachte diese Vorgaben genau und liefere einen umfassenden, inhaltlich tiefgehenden JSON-Output, der ausschließlich den Block zum Keyword \"[Gib hier das relevante Keyword ein]\" umfasst.\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "[Agent 1 | {Datum/Uhrzeit}]\n--- Zusammenfassung ---\nDu bist Agent 1 und deine Hauptaufgabe besteht darin, einen **extrem detaillierten und umfassenden Rohentwurf** zu erstellen. **WICHTIG:**  \nDer Benutzer gibt zunächst _ausschließlich_ eines der folgenden Keywords ein: **Marketing, Mail, Automatisierung, Webinare, Kurse, LinkedIn**. Bis weitere Informationen bereitgestellt werden, generierst du **nur** den zu diesem Keyword gehörenden Textblock. Keine Inhalte zu anderen Themen dürfen erscheinen!\n\n**Deine detaillierten Aufgaben:**\n\n1. **Schlüsselwort-Erkennung und Filterung:**\n   - Scanne den gesamten Input sowie sämtliche relevanten Memory-Einträge.\n   - Identifiziere _ausschließlich_ die folgenden Keywords:\n     - **Marketing**\n     - **Mailing**\n     - **Automatisierung**\n     - **Webinare**\n     - **Kurse**\n     - **LinkedIn**\n   - **Filterlogik:**  \n     - Wenn der Input _nur_ ein einzelnes Keyword (z. B. \"Mail\") enthält, generiere **ausschließlich** den Textblock zu diesem Keyword.  \n     - Falls mehrere Keywords angegeben werden (z. B. \"Mail, Webinare\"), erstelle _nur_ getrennte, klar abgegrenzte Textblöcke für die genannten Keywords – **keine zusätzlichen Themen!**\n\n2. **Erstellung des Rohentwurfs:**\n   - Generiere einen **vollständigen, inhaltlich fundierten Textblock** für das aktuell angegebene Keyword.\n   - **Detailtiefe:**  \n     - Jeder Textblock muss mindestens **300–500 Wörter** umfassen. Bei besonders komplexen Themen kann dieser Block auf **600–1000+ Wörter** erweitert werden.\n   - Integriere **praxisnahe Beispiele**, **konkrete Tools**, **Schritt-für-Schritt-Anleitungen**, **Checklisten**, **häufige Fehlerquellen** und **weiterführende Links/Quellen**.\n   - **Dynamische Erweiterbarkeit:**  \n     - Falls zu einem späteren Zeitpunkt zusätzliche Informationen oder spezifische Anweisungen folgen, erweitere den bestehenden Block _ohne_ andere Themen zu integrieren.\n\n3. **Exakte Formatierung und Strukturierung:**\n   - Verwende das untenstehende Format, um den Output klar und eindeutig zu strukturieren:\n     ```\n     [Agent 1 | Datum]\n     --- Zusammenfassung (optional) ---\n     \n   \n     \n     --- Tags ---\n     #[Keyword]\n     ```\n   - Sorge dafür, dass der Textblock klar abgegrenzt und so strukturiert ist, dass spätere Erweiterungen problemlos möglich sind.\n\n--- Hauptteil (ausführlicher Entwurf) ---\n[Erstelle hier den extrem detaillierten Textblock _ausschließlich_ zum aktuell eingegebenen Keyword.]\n\n--- Tags ---\n#[eingabe-keyword]\n"
+        }
+      },
+      "id": "43025f3c-e598-4553-a755-bcae63f33fa7",
+      "name": "AI Agent A1 (Q&A / Erläuterung)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1660,
+        40
+      ],
+      "typeVersion": 1.7,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {
+          "language": "de",
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [
+        920,
+        180
+      ],
+      "id": "d6168252-bb99-472d-8eb9-ab2d0c2367d0",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "gPZPGEpPhjBdo14S",
+          "name": "OpenAi Key Telegram"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Telegram Acc erstellen\n\n- @BotFather einen neuen Bot erstellen / davon 2\n\n- Bots in Channel einladen\n- Admin Rechte erteilen\n\n- Telegram Node\n- Acc verknüpfen mit API / Tokken\n\n",
+        "height": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        300,
+        100
+      ],
+      "id": "e9145a88-15ee-4dfe-abed-2142716c6853",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Telegram Node\n\n- Bot A erstellen mit API / Tokken\n",
+        "height": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        640,
+        60
+      ],
+      "id": "52dab74c-0473-439f-8e95-a7048b463d31",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Goolge Acc verknüpfen\n\n\n\nGoogle Sheet Vorlage\n- dient als Speicher für die Bots und AI Agent\nhttps://docs.google.com/spreadsheets/d/1v_Iw-NwFL6DsdOeZ_N0YY6NrRPqC7XExZUO-3fiiFO8/edit?gid=0#gid=0",
+        "height": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3100,
+        -200
+      ],
+      "id": "c32dfeac-7723-421e-aa57-57f60a08a991",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "ChatGPT acc erstellen\n- API Schlüssel generieren\n- Konto Verknüpfen\n\nAi Agen A1 \n- dient dazu die Keywords zu erkennen und den ersten Entwurf zu erstellen\n\nBedeutung User und System Prombt\n\nSystem Prombt gibt den Ai Agent seine Aufgaben\n\n- User Prombt verfeinert die Ansprache / Text\n",
+        "height": 620
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        -340
+      ],
+      "id": "d9af3795-393f-4a87-8e5d-3e13df7ee5fc",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "Switch Node\n- um nach Keywords zu filtern / im Anschluss passende Liste\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5480,
+        -160
+      ],
+      "id": "6c0aea32-aa20-431e-a483-ceb391e5995e",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "Trello acc Verknüpfen\n\n- API und Tokken erstellen über Trello\n\nListen ID \n- Power Up verwenden / Trello\nAPI Developer ID Helper ",
+        "height": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5220,
+        -320
+      ],
+      "id": "9cde9cdc-0031-45ac-a8de-d2ae15ffc8e3",
+      "name": "Sticky Note5"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model9": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent A3 Final merge",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model11": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item List Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser2",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent A3 Final merge",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item List Output Parser3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser3",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent A1 (Q&A / Erläuterung)",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent B- Creativity",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item List Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Determine content type1": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram Send (Bot A)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger (Main)": {
+      "main": [
+        [
+          {
+            "node": "Determine content type1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Send (Bot A)": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model (A3)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent B- Creativity",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model (A3)2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model (B2)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model (A1)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent A1 (Q&A / Erläuterung)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model (A2)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent B-Strategy",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent B- Creativity",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent A3 Final merge",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent B-Strategy",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent A1 (Q&A / Erläuterung)",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets11": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent A1 (Q&A / Erläuterung)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Speicher": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent B-Strategy",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Speicher1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent B- Creativity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "speicher": {
+      "main": [
+        [
+          {
+            "node": "AI Agent A3 Final merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Speicher3": {
+      "main": [
+        [
+          {
+            "node": "AI Agent B-Strategy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Speicher4": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent B- Creativity",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Speicher5": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent A3 Final merge",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Next Agent": {
+      "main": [
+        [
+          {
+            "node": "speicher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Mail",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Automatisierung",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Webinare",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Marketing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent B- Creativity": {
+      "main": [
+        [
+          {
+            "node": "Switch Next Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Kurse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "Telegram Send #4 (Bot B)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code5": {
+      "main": [
+        [
+          {
+            "node": "Code6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code6": {
+      "main": [
+        [
+          {
+            "node": "Speicher2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent A3 Final merge": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Check Choices1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent A1 (Q&A / Erläuterung)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Check Choices2": {
+      "main": [
+        [
+          {
+            "node": "Speicher3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent B-Strategy": {
+      "main": [
+        [
+          {
+            "node": "Switch Check Choices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Check Choices": {
+      "main": [
+        [
+          {
+            "node": "Speicher1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent A1 (Q&A / Erläuterung)": {
+      "main": [
+        [
+          {
+            "node": "Switch Check Choices2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Switch Check Choices1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "104cb791-4fb2-4e2e-8ca8-51c5670aa713",
+  "meta": {
+    "templateId": "2592",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "157bad5e240d7c08c9f313c28c8c3f1398d2efd4a419601a2b5012f963c69d1f"
+  },
+  "id": "nCfKD2YH5OOezYc8",
+  "tags": []
+}
